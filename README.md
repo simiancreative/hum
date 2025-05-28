@@ -1,6 +1,6 @@
 # hum
 
-![hum logo](./hummingbird.png)
+![hum logo](./static/hummingbird.png)
 
 **hum** is a Neovim plugin that uses the Claude API to generate clean, natural-language commit messages and pull request descriptions — guided by your repository’s PR template.
 
