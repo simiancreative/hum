@@ -17,7 +17,7 @@ describe("hum.prompts", function()
       local prompt = prompts.commit_prompt(diff)
       
       assert.is_string(prompt)
-      assert.matches("You are an expert developer", prompt)
+      assert.matches("Generate a concise git commit message", prompt)
       assert.matches("Conventional Commits format", prompt)
       assert.matches("test diff content$", prompt) -- Diff should be at the end
     end)
@@ -30,8 +30,10 @@ describe("hum.prompts", function()
       local prompt = prompts.pr_prompt(template, diff)
       
       assert.is_string(prompt)
-      assert.matches("You are an expert developer", prompt)
+      assert.matches("Fill in the PR template", prompt)
+      assert.matches("PR TEMPLATE:", prompt)
       assert.matches("PR template", prompt)
+      assert.matches("CHANGES:", prompt)
       assert.matches("test diff content$", prompt) -- Diff should be at the end
     end)
   end)

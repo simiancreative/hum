@@ -113,6 +113,18 @@ function M.format_response(text)
   -- Remove markdown block quotes if present
   text = text:gsub("```[%w]*\n", ""):gsub("```$", "")
 
+  -- Remove any explanatory text or notes at the beginning
+  text = text:gsub("^Note:.-\n\n", "")
+  text = text:gsub("^Here's a commit message:.-\n\n", "")
+  text = text:gsub("^Commit message:.-\n\n", "")
+  text = text:gsub("^I've generated the following.-\n\n", "")
+  text = text:gsub("^Based on the diff.-\n\n", "")
+
+  -- Remove any explanatory text at the end
+  text = text:gsub("\n\nLet me know if you.-$", "")
+  text = text:gsub("\n\nIs there anything else.-$", "")
+  text = text:gsub("\n\nThis commit message.-$", "")
+
   return text
 end
 

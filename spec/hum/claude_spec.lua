@@ -76,5 +76,21 @@ This is a code block
       local formatted = claude.format_response(nil)
       assert.equals("", formatted)
     end)
+    
+    it("should remove explanatory text at the beginning", function()
+      local response = "Here's a commit message:\n\nfeat: add new feature"
+      local formatted = claude.format_response(response)
+      assert.equals("feat: add new feature", formatted)
+      
+      response = "Based on the diff, I've created this commit message:\n\nfix: correct issue with API"
+      formatted = claude.format_response(response)
+      assert.equals("fix: correct issue with API", formatted)
+    end)
+    
+    it("should remove explanatory text at the end", function()
+      local response = "feat: add new feature\n\nLet me know if you want any changes."
+      local formatted = claude.format_response(response)
+      assert.equals("feat: add new feature", formatted)
+    end)
   end)
 end)
