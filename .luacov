@@ -1,0 +1,14 @@
+return {
+  include = {
+    "lua/hum",
+  },
+  exclude = {
+    "spec",
+  },
+  modules = {
+    ["hum"] = "lua/hum/init.lua",
+    ["hum.claude"] = "lua/hum/claude.lua",
+    ["hum.git"] = "lua/hum/git.lua",
+    ["hum.prompts"] = "lua/hum/prompts.lua",
+  }
+}

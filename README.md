@@ -66,6 +66,28 @@ Generate a PR description based on your current branch diff:
 
 ---
 
+## Development
+
+If you're interested in contributing to Hum:
+
+```bash
+# Clone the repository
+git clone https://github.com/simiancreative/hum.git
+
+# Set up the development environment (installs dependencies and git hooks)
+make setup
+
+# Run tests
+make test
+
+# Run linter
+make lint
+```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
+
+---
+
 ## Configuration
 
 ```lua

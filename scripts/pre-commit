@@ -1,0 +1,22 @@
+#!/usr/bin/env sh
+
+# Pre-commit hook to run luacheck
+echo "Running luacheck..."
+
+# Check if luacheck is installed
+if ! command -v luacheck >/dev/null 2>&1; then
+  echo "Error: luacheck not found."
+  echo "Please install luacheck: luarocks install luacheck"
+  exit 1
+fi
+
+# Run luacheck on the project
+luacheck lua/
+
+# If luacheck fails, prevent the commit
+if [ $? -ne 0 ]; then
+  echo "Luacheck failed! Fix the issues before committing."
+  exit 1
+fi
+
+exit 0

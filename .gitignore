@@ -1,0 +1,42 @@
+# Local Claude settings
+**/.claude/settings.local.json
+
+# Lua compiled files
+*.lua_compiled
+*.luac
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor directories and files
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# Lua rocks
+lua_modules/
+.luarocks/
+
+# Environment variables
+.env
+.env.local
+
+# Test coverage files
+luacov.*
+.luacov.stats.*
+*.lcov
+coverage/
+
+# Test files
+.busted/
+
+# Log files
+*.log
