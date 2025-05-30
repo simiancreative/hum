@@ -1,8 +1,8 @@
 local M = {}
 
 -- Commit message prompt template
-function M.commit_prompt(diff)
-  return [[
+function M.commit_prompt(diff, motivation)
+  local base_prompt = [[
 Generate a concise git commit message in Conventional Commits format based on this diff.
 Do not include explanations, notes, or any text outside of the commit message itself.
 Your response should be ONLY the commit message, ready to use as-is.
@@ -19,18 +19,36 @@ Available types:
 - test: Adding/fixing tests
 - chore: Changes to build process or auxiliary tools
 
-Keep the message brief, use imperative mood, and focus on what was changed and why.
+Keep the message brief, use imperative mood, and focus on what was changed and why.]]
+
+  if motivation then
+    base_prompt = base_prompt .. [[
+
+MOTIVATION:
+Consider this motivation when crafting the commit message: ]] .. motivation
+  end
+
+  return base_prompt .. [[
 
 DIFF:
 ]] .. diff
 end
 
 -- PR description prompt template
-function M.pr_prompt(template, diff_or_commits)
-  return [[
+function M.pr_prompt(template, diff_or_commits, motivation)
+  local base_prompt = [[
 Fill in the PR template below based on the provided git diff or commit messages.
 Focus on being specific, explaining why changes were made, and providing helpful context for reviewers.
-Your response should exactly follow the template format without additional commentary.
+Your response should exactly follow the template format without additional commentary.]]
+
+  if motivation then
+    base_prompt = base_prompt .. [[
+
+MOTIVATION:
+Consider this motivation when filling out the PR template: ]] .. motivation
+  end
+
+  return base_prompt .. [[
 
 PR TEMPLATE:
 ]] .. template .. [[

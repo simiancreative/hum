@@ -35,7 +35,7 @@ function M.setup(opts)
 end
 
 -- Generate a commit message using Claude
-local function generate_commit_message()
+local function generate_commit_message(motivation)
   local git = lazy.git()
   local claude = lazy.claude()
   local prompts = lazy.prompts()
@@ -48,10 +48,16 @@ local function generate_commit_message()
   end
 
   -- Notify user that we're generating the commit message
-  vim.notify("Generating commit message...", vim.log.levels.INFO)
+  local notification_msg = "Generating commit message"
+  if motivation then
+    notification_msg = notification_msg .. " (with motivation)..."
+  else
+    notification_msg = notification_msg .. "..."
+  end
+  vim.notify(notification_msg, vim.log.levels.INFO)
 
   -- Create the prompt
-  local prompt = prompts.commit_prompt(diff)
+  local prompt = prompts.commit_prompt(diff, motivation)
 
   -- Send the request to Claude
   claude.send_request(prompt, function(response, err)
@@ -83,7 +89,7 @@ local function generate_commit_message()
 end
 
 -- Generate a PR description using Claude
-local function generate_pr_description()
+local function generate_pr_description(motivation)
   local git = lazy.git()
   local claude = lazy.claude()
   local prompts = lazy.prompts()
@@ -102,10 +108,16 @@ local function generate_pr_description()
   end
 
   -- Notify user that we're generating the PR description
-  vim.notify("Generating PR description...", vim.log.levels.INFO)
+  local notification_msg = "Generating PR description"
+  if motivation then
+    notification_msg = notification_msg .. " (with motivation)..."
+  else
+    notification_msg = notification_msg .. "..."
+  end
+  vim.notify(notification_msg, vim.log.levels.INFO)
 
   -- Create the prompt
-  local prompt = prompts.pr_prompt(template, content)
+  local prompt = prompts.pr_prompt(template, content, motivation)
 
   -- Send the request to Claude
   claude.send_request(prompt, function(response, err)
@@ -139,13 +151,15 @@ end
 
 -- Register Neovim commands
 function M.create_commands()
-  vim.api.nvim_create_user_command("HumCommit", function()
-    generate_commit_message()
-  end, {})
+  vim.api.nvim_create_user_command("HumCommit", function(opts)
+    local motivation = opts.args and #opts.args > 0 and opts.args or nil
+    generate_commit_message(motivation)
+  end, { nargs = "?" })
 
-  vim.api.nvim_create_user_command("HumPR", function()
-    generate_pr_description()
-  end, {})
+  vim.api.nvim_create_user_command("HumPR", function(opts)
+    local motivation = opts.args and #opts.args > 0 and opts.args or nil
+    generate_pr_description(motivation)
+  end, { nargs = "?" })
 end
 
 -- Get the Claude API key from config or environment
@@ -164,5 +178,9 @@ function M.validate_config()
     )
   end
 end
+
+-- Expose functions for testing
+M.generate_commit = generate_commit_message
+M.generate_pr = generate_pr_description
 
 return M
