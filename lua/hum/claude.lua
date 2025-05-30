@@ -89,7 +89,7 @@ function M.send_request(prompt, callback, opts)
             text = text .. content_part.text
           end
         end
-        callback(text, nil)
+        callback(text, nil, response)
       else
         callback(nil, "Unexpected response format: " .. vim.inspect(response))
       end

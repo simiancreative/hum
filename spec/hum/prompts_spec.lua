@@ -17,7 +17,7 @@ describe("hum.prompts", function()
       local prompt = prompts.commit_prompt(diff)
       
       assert.is_string(prompt)
-      assert.matches("Generate a concise git commit message", prompt)
+      assert.matches("Generate a git commit message", prompt)
       assert.matches("Conventional Commits format", prompt)
       assert.matches("test diff content$", prompt) -- Diff should be at the end
     end)
@@ -28,7 +28,7 @@ describe("hum.prompts", function()
       local prompt = prompts.commit_prompt(diff, motivation)
       
       assert.is_string(prompt)
-      assert.matches("Generate a concise git commit message", prompt)
+      assert.matches("Generate a git commit message", prompt)
       assert.matches("Conventional Commits format", prompt)
       assert.matches("fixing critical bug", prompt)
       assert.matches("test diff content$", prompt) -- Diff should be at the end
@@ -39,7 +39,7 @@ describe("hum.prompts", function()
       local prompt = prompts.commit_prompt(diff, nil)
       
       assert.is_string(prompt)
-      assert.matches("Generate a concise git commit message", prompt)
+      assert.matches("Generate a git commit message", prompt)
       assert.matches("Conventional Commits format", prompt)
       assert.matches("test diff content$", prompt) -- Diff should be at the end
     end)

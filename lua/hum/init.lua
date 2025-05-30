@@ -5,6 +5,7 @@ M.config = {
   claude_api_key = nil,  -- API key for Claude
   model = "claude-3-sonnet-20240229",  -- Default model to use
   pr_template_path = ".github/PULL_REQUEST_TEMPLATE.md",  -- Default PR template path
+  show_metrics = true,  -- Show API metrics in notifications
 }
 
 -- Lazily load modules to avoid circular dependencies
@@ -18,6 +19,7 @@ local lazy = {
   claude = require_module("claude"),
   git = require_module("git"),
   prompts = require_module("prompts"),
+  metrics = require_module("metrics"),
 }
 
 -- Setup function to initialize the plugin with user configuration
@@ -60,7 +62,7 @@ local function generate_commit_message(motivation)
   local prompt = prompts.commit_prompt(diff, motivation)
 
   -- Send the request to Claude
-  claude.send_request(prompt, function(response, err)
+  claude.send_request(prompt, function(response, err, raw_response)
     if err then
       vim.notify("Error generating commit message: " .. err, vim.log.levels.ERROR)
       return
@@ -68,6 +70,13 @@ local function generate_commit_message(motivation)
 
     -- Format the response
     local formatted = claude.format_response(response)
+
+    -- Display metrics if enabled and raw response is available
+    if raw_response and M.config.show_metrics then
+      local metrics = lazy.metrics()
+      local usage = metrics.extract_usage_from_response(raw_response)
+      metrics.display_metrics(usage, M.config)
+    end
 
     -- Open the commit editor with the generated message
     vim.cmd("Git commit")
@@ -120,7 +129,7 @@ local function generate_pr_description(motivation)
   local prompt = prompts.pr_prompt(template, content, motivation)
 
   -- Send the request to Claude
-  claude.send_request(prompt, function(response, err)
+  claude.send_request(prompt, function(response, err, raw_response)
     if err then
       vim.notify("Error generating PR description: " .. err, vim.log.levels.ERROR)
       return
@@ -128,6 +137,13 @@ local function generate_pr_description(motivation)
 
     -- Format the response
     local formatted = claude.format_response(response)
+
+    -- Display metrics if enabled and raw response is available
+    if raw_response and M.config.show_metrics then
+      local metrics = lazy.metrics()
+      local usage = metrics.extract_usage_from_response(raw_response)
+      metrics.display_metrics(usage, M.config)
+    end
 
     -- Create a new scratch buffer
     local bufnr = vim.api.nvim_create_buf(false, true)

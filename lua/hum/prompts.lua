@@ -7,7 +7,7 @@ Generate a git commit message in Conventional Commits format based on this diff.
 Do not include explanations, notes, or any text outside of the commit message itself.
 Your response should be ONLY the commit message, ready to use as-is.
 
-Format: 
+Format:
 <type>[optional scope]: <description>
 
 [optional body]
