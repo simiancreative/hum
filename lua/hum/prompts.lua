@@ -3,11 +3,14 @@ local M = {}
 -- Commit message prompt template
 function M.commit_prompt(diff, motivation)
   local base_prompt = [[
-Generate a concise git commit message in Conventional Commits format based on this diff.
+Generate a git commit message in Conventional Commits format based on this diff.
 Do not include explanations, notes, or any text outside of the commit message itself.
 Your response should be ONLY the commit message, ready to use as-is.
 
-Format: <type>[optional scope]: <description>
+Format: 
+<type>[optional scope]: <description>
+
+[optional body]
 
 Available types:
 - feat: A new feature
@@ -19,7 +22,12 @@ Available types:
 - test: Adding/fixing tests
 - chore: Changes to build process or auxiliary tools
 
-Keep the message brief, use imperative mood, and focus on what was changed and why.]]
+Guidelines:
+- Subject line: Brief, imperative mood, focus on what was changed
+- Body (optional): Add when the change is complex or needs explanation
+- Include body for significant changes, breaking changes, or when context helps
+- Separate subject and body with a blank line
+- Wrap body at 72 characters]]
 
   if motivation then
     base_prompt = base_prompt .. [[
